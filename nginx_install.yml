@@ -1,0 +1,23 @@
+---
+- name: ngxin install
+  hosts: web
+  tasks:
+    - name: install the latest version of nginx 
+      yum:
+        name: nginx
+        state: latest
+        update_cache: yes
+      notify: nginx_service
+    - name: create index.html
+      template:
+        src: index.j2
+        dest: /usr/local/nginx/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+  handlers:
+    - name: nginx_service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
